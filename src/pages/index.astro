@@ -76,7 +76,7 @@ const infiniteTools = [...tools, ...tools, ...tools];
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       </button>
       
-      <div class="horizontal-scroll" id="tool-slider">
+      <div class="horizontal-scroll" id="tool-slider" data-count={tools.length}>
         {infiniteTools.map((tool, index) => (
           <button class="h-card glass" data-target={`details-${tool.id}`} data-index={index}>
             <div class="h-card-img" style={tool.image ? `background-image:url(${tool.image})` : 'background:rgba(0,0,0,0.05)'}></div>
@@ -184,15 +184,24 @@ const infiniteTools = [...tools, ...tools, ...tools];
   let isClicked = false;
   let animationId: number;
   
-  // スムーズな無限スクロールを実現するための設定値
-  // (カード幅 280px + gap 24px) * 元の要素数(5) = 1520px
-  const setWidth = (280 + 24) * 5; 
+  // スムーズな無限スクロールを実現するための「1セット分の幅」
+  // 1セット目の先頭カードから2セット目の先頭カードまでの距離を実際に測るので、
+  // ツールの数・カード幅・gap が変わっても自動で合う（画面幅が変わったら測り直す）
+  let setWidth = 0;
+  function measureSetWidth() {
+    const count = Number(slider?.dataset.count);
+    const sliderCards = slider?.querySelectorAll<HTMLElement>('.h-card');
+    if (!sliderCards || !sliderCards[count]) return;
+    setWidth = sliderCards[count].offsetLeft - sliderCards[0].offsetLeft;
+  }
+  measureSetWidth();
+  window.addEventListener('resize', measureSetWidth);
 
   function autoScroll() {
     if (!isHovered && !isClicked && slider) {
       slider.scrollLeft += 0.8; // 流れるスピード
       // 1セット分スクロールしたら、違和感なく0に戻す（無限ループ）
-      if (slider.scrollLeft >= setWidth) {
+      if (setWidth > 0 && slider.scrollLeft >= setWidth) {
         slider.scrollLeft = 0;
       }
     }
@@ -430,7 +439,7 @@ const infiniteTools = [...tools, ...tools, ...tools];
     display: flex;
     align-items: center; /* カードの高さが変わっても中央揃えにする */
     overflow-x: auto;
-    gap: 1.5rem; /* gapはJSの setWidth に影響するため変更時はJSも要修正 */
+    gap: 1.5rem;
     padding: 1rem 1rem 2rem 1rem;
     width: 100%;
     
