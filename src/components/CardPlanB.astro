@@ -1,0 +1,270 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  detailText: string;
+  url: string;
+  image?: string;
+  type: 'BOOTH' | 'Web' | 'Spreadsheet';
+}
+
+const { id, title, description, detailText, url, image, type } = Astro.props;
+---
+
+<!-- グリッド上のカード -->
+<button type="button" class="plan-b-card glass" aria-expanded="false" data-target={`details-${id}`}>
+  <div class="card-image-wrap">
+    {image ? (
+      <div class="card-image" style={`background-image: url('${image}')`}></div>
+    ) : (
+      <div class="card-image placeholder"></div>
+    )}
+  </div>
+  <div class="card-content">
+    <span class={`tag tag-${type.toLowerCase()}`}>{type}</span>
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </div>
+</button>
+
+<!-- インライン展開される全幅詳細パネル (初期状態は隠れている) -->
+<div id={`details-${id}`} class="plan-b-details glass">
+  <div class="details-inner">
+    <button class="close-details" aria-label="閉じる">×</button>
+    <div class="details-layout">
+      {image && (
+        <div class="details-left">
+          <img src={image} alt={title} class="detail-image" />
+        </div>
+      )}
+      <div class="details-right">
+        <h2>{title}</h2>
+        <span class={`tag tag-${type.toLowerCase()}`}>{type}</span>
+        <div class="detail-desc">
+          {detailText.split('\n').map((line) => (
+            <p>{line}</p>
+          ))}
+        </div>
+        <div class="detail-actions">
+          <a href={url} target="_blank" rel="noopener noreferrer" class="btn btn-primary">公開ページへ ↗</a>
+          <a href="#" target="_blank" class="btn btn-secondary">🎁 FANBOXで支援・おまけ</a>
+          <a href="#" target="_blank" class="btn btn-secondary">💬 X (Twitter) での解説</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .plan-b-card {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    /* 選択状態をわかりやすくする */
+    outline: 2px solid transparent;
+  }
+  
+  .plan-b-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  }
+  [data-theme='dark'] .plan-b-card:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  }
+
+  .plan-b-card[aria-expanded="true"] {
+    outline: 2px solid var(--text-color);
+    transform: scale(0.98);
+  }
+
+  .card-image-wrap {
+    width: 100%;
+    height: 140px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+  }
+  .card-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+  .placeholder {
+    background: rgba(0,0,0,0.05);
+  }
+  [data-theme='dark'] .placeholder {
+    background: rgba(255,255,255,0.05);
+  }
+
+  .card-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    align-self: flex-start;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: white;
+  }
+  .tag-booth { background: var(--tag-booth); }
+  .tag-web { background: var(--tag-web); }
+  .tag-spreadsheet { background: var(--tag-spreadsheet); }
+
+  .card-content h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .card-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* インライン詳細パネル */
+  .plan-b-details {
+    /* グリッドコンテナ内で全幅を使う */
+    grid-column: 1 / -1;
+    overflow: hidden;
+    /* CSSアニメーションのために高さを0にする */
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1), margin 0.3s;
+    margin-top: -1rem; /* 初期は間隔を詰める */
+    border-radius: 24px;
+  }
+
+  /* 表示状態のクラス (JSで付与) */
+  .plan-b-details.open {
+    grid-template-rows: 1fr;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .details-inner {
+    min-height: 0;
+    opacity: 0;
+    transition: opacity 0.3s 0.1s;
+    position: relative;
+  }
+
+  .plan-b-details.open .details-inner {
+    opacity: 1;
+    padding: 2rem;
+  }
+
+  .close-details {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .details-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .details-left {
+    flex: 0 0 350px;
+  }
+  .detail-image {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+  }
+
+  .details-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .details-right h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .detail-desc {
+    margin-top: 1rem;
+  }
+  .detail-desc p {
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+    opacity: 0.9;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.9rem;
+    transition: transform 0.2s, filter 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+  .btn-primary {
+    background: var(--text-color);
+    color: var(--bg-gradient);
+  }
+  [data-theme='dark'] .btn-primary {
+    background: #fff;
+    color: #000;
+  }
+  .btn-secondary {
+    background: rgba(0,0,0,0.05);
+    color: var(--text-color);
+    border: 1px solid var(--glass-border);
+  }
+  [data-theme='dark'] .btn-secondary {
+    background: rgba(255,255,255,0.05);
+  }
+
+  @media (max-width: 768px) {
+    .details-layout {
+      flex-direction: column;
+    }
+    .details-left {
+      flex: 1;
+      width: 100%;
+    }
+  }
+</style>

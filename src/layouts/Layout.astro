@@ -1,0 +1,580 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Nunutaya Tools - TRPGに役立つツール公開中" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Fluid Orbs Background -->
+    <div class="bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <!-- 浮遊する多面体ダイス背景 (20面体ワイヤーフレーム＋数字) -->
+    <svg class="bg-dice" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <!-- Outer Hexagon -->
+      <polygon points="100,10 180,55 180,145 100,190 20,145 20,55" />
+      <!-- Inner Triangle -->
+      <polygon points="100,135 45,70 155,70" />
+      <!-- Connecting lines -->
+      <line x1="100" y1="10" x2="45" y2="70" />
+      <line x1="100" y1="10" x2="155" y2="70" />
+      <line x1="180" y1="55" x2="155" y2="70" />
+      <line x1="180" y1="145" x2="155" y2="70" />
+      <line x1="180" y1="145" x2="100" y2="135" />
+      <line x1="100" y1="190" x2="100" y2="135" />
+      <line x1="20" y1="145" x2="100" y2="135" />
+      <line x1="20" y1="145" x2="45" y2="70" />
+      <line x1="20" y1="55" x2="45" y2="70" />
+      
+      <!-- Numbers -->
+      <g fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central" font-family="'Zen Maru Gothic', sans-serif">
+        <text x="100" y="98" font-size="32" font-weight="900">20</text>
+        <text x="100" y="55" font-size="20" font-weight="700">2</text>
+        <text x="55" y="50" font-size="16" font-weight="700">14</text>
+        <text x="145" y="50" font-size="16" font-weight="700">8</text>
+        <text x="34" y="95" font-size="14" font-weight="700">12</text>
+        <text x="166" y="95" font-size="14" font-weight="700">4</text>
+        <text x="55" y="120" font-size="16" font-weight="700">10</text>
+        <text x="145" y="120" font-size="16" font-weight="700">18</text>
+        <text x="73" y="160" font-size="14" font-weight="700">16</text>
+        <text x="126" y="160" font-size="14" font-weight="700">6</text>
+      </g>
+    </svg>
+
+    <header class="header glass">
+      <div class="header-content">
+        <div class="title-area">
+          <h1>ぬこた屋ツールズ</h1>
+          <span class="subtitle">TRPGに役立つツール公開中</span>
+        </div>
+        <div class="header-actions">
+          
+          <!-- 作者モーダルボタン -->
+          <button id="author-btn" aria-label="作った人" title="作った人">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+          </button>
+          
+          <!-- お問い合わせ（Google Forms） -->
+          <a href="https://forms.gle/K2Lkdcw2akgnDvoVA" target="_blank" aria-label="お問い合わせ" title="お問い合わせ" class="header-link-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+          </a>
+
+          <!-- シェアメニュー -->
+          <div class="share-wrapper">
+            <button id="share-btn" aria-label="シェア" title="シェアする">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+              </svg>
+            </button>
+            <div id="share-menu" class="share-menu glass">
+              <button id="copy-link" class="share-item">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" /></svg>
+                リンクをコピー
+              </button>
+              <a href="#" id="share-x" class="share-item" target="_blank">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                Xでシェア
+              </a>
+              <a href="#" id="share-bluesky" class="share-item" target="_blank">
+                <svg viewBox="0 0 16 16" fill="#0085ff" width="16"><path d="M3.468 1.948C5.303 3.325 7.276 6.118 8 7.616c.725-1.498 2.698-4.29 4.532-5.668C13.855.955 16 .186 16 2.632c0 .489-.28 4.105-.444 4.692-.572 2.04-2.653 2.561-4.504 2.246 3.236.551 4.06 2.375 2.281 4.2-3.376 3.464-4.852-.87-5.23-1.98-.07-.204-.103-.3-.103-.218 0-.081-.033.014-.102.218-.379 1.11-1.855 5.444-5.231 1.98-1.778-1.825-.955-3.65 2.28-4.2-1.85.315-3.932-.205-4.503-2.246C.28 6.737 0 3.12 0 2.632 0 .186 2.145.955 3.468 1.948" /></svg>
+                Blueskyでシェア
+              </a>
+              <a href="#" id="share-misskey" class="share-item" target="_blank">
+                <svg viewBox="0 0 24 24" fill="#86b300" width="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" /></svg>
+                Misskeyでシェア
+              </a>
+              <a href="#" id="share-discord" class="share-item" target="_blank">
+                <svg viewBox="0 0 24 24" fill="#5865F2" width="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.1" /></svg>
+                Discordでシェア
+              </a>
+            </div>
+            <div id="copy-toast" class="toast">リンクをコピーしました</div>
+          </div>
+          
+          <!-- テーマ切り替えボタン -->
+          <button id="theme-toggle" aria-label="テーマ切替" title="テーマ切替">
+            <div class="icon-sun">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </div>
+            <div class="icon-moon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <span>&copy; 2026 ぬこた</span>
+        <span>最終更新日：2026年6月26日</span>
+      </div>
+    </footer>
+
+    <!-- 作者紹介モーダル -->
+    <dialog id="author-modal">
+      <div class="modal-content glass">
+        <button class="close-btn" aria-label="閉じる">×</button>
+        <div class="author-info">
+          <h2>作った人</h2>
+          
+          <div class="author-profile">
+            <img src="/KPdefo.png" alt="ぬこた" class="author-icon" />
+            <div class="author-name">ぬこた</div>
+          </div>
+          
+          <p>TRPGが好きな個人開発者です。セッションを便利にするための様々なツールを作っています。</p>
+          
+          <div class="author-links">
+            <a href="https://x.com/nukonuko_4" target="_blank" class="link-btn">X (Twitter)</a>
+            <a href="https://alpha.booth.pm/" target="_blank" class="link-btn">BOOTH</a>
+            <a href="https://nukonuko4.fanbox.cc" target="_blank" class="link-btn">FANBOX</a>
+          </div>
+          
+          <hr class="modal-divider" />
+          
+          <div class="support-section">
+            <p>
+              当ツールを気に入って支援したい富豪・石油王様向けに、<br/>
+              <a href="https://booth.pm/wish_list_names/K1NTM3Bx" target="_blank" class="text-link">BOOTHのスキリスト</a>、<a href="https://www.amazon.jp/hz/wishlist/ls/2SYYSJUGAZKIR?ref_=wl_share" target="_blank" class="text-link">Amazonのほしいものリスト</a>を公開しています。<br/>
+              その他URLでのギフトも大歓迎です。<br/>
+              <span class="small-note">（※ギフトURLはお問い合わせボタンからお送りください。）</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      // ===== テーマ設定 =====
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle?.addEventListener('click', () => {
+        let theme = document.documentElement.getAttribute('data-theme');
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+
+      // ===== 作者モーダルの制御 =====
+      const authorBtn = document.getElementById('author-btn');
+      const authorModal = document.getElementById('author-modal') as HTMLDialogElement;
+      const closeBtn = authorModal?.querySelector('.close-btn');
+
+      authorBtn?.addEventListener('click', () => {
+        authorModal?.showModal();
+      });
+
+      closeBtn?.addEventListener('click', () => {
+        authorModal?.close();
+      });
+
+      authorModal?.addEventListener('click', (e) => {
+        const dialogDimensions = authorModal.getBoundingClientRect();
+        if (
+          e.clientX < dialogDimensions.left ||
+          e.clientX > dialogDimensions.right ||
+          e.clientY < dialogDimensions.top ||
+          e.clientY > dialogDimensions.bottom
+        ) {
+          authorModal.close();
+        }
+      });
+
+      // ===== シェアメニューの制御 =====
+      const shareBtn = document.getElementById('share-btn');
+      const shareMenu = document.getElementById('share-menu');
+      
+      shareBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        shareMenu?.classList.toggle('active');
+      });
+
+      document.addEventListener('click', () => {
+        shareMenu?.classList.remove('active');
+      });
+
+      const siteUrl = window.location.href.split('?')[0];
+      const siteTitle = 'ぬこた屋ツールズ';
+      
+      document.getElementById('share-x')?.setAttribute('href', `https://x.com/intent/tweet?text=${encodeURIComponent(siteTitle)}&url=${encodeURIComponent(siteUrl)}`);
+      document.getElementById('share-bluesky')?.setAttribute('href', `https://bsky.app/intent/compose?text=${encodeURIComponent(siteTitle + ' ' + siteUrl)}`);
+      document.getElementById('share-misskey')?.setAttribute('href', `https://misskey-hub.net/share/?text=${encodeURIComponent(siteTitle)}&url=${encodeURIComponent(siteUrl)}`);
+      document.getElementById('share-discord')?.setAttribute('href', `https://discord.com/channels/@me`);
+
+      const copyLinkBtn = document.getElementById('copy-link');
+      const toast = document.getElementById('copy-toast');
+      copyLinkBtn?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          await navigator.clipboard.writeText(siteUrl);
+          if (toast) {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+          }
+        } catch (err) {
+          console.error('Failed to copy', err);
+        }
+      });
+    </script>
+
+    <style>
+      .header {
+        position: sticky;
+        top: 20px;
+        margin: 20px auto;
+        max-width: 1200px;
+        z-index: 1000;
+        border-radius: 100px;
+        padding: 0 2rem;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+        flex-wrap: wrap;
+      }
+
+      .title-area {
+        display: flex;
+        align-items: baseline;
+        gap: 15px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        white-space: nowrap;
+      }
+      
+      .subtitle {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.8;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          height: auto;
+          padding: 1rem 0;
+          gap: 10px;
+        }
+        .title-area {
+          flex-direction: column;
+          align-items: center;
+          gap: 5px;
+        }
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .header-actions button, .header-link-btn {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-color);
+        transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+      }
+      .header-actions button svg, .header-link-btn svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .header-actions button:hover, .header-link-btn:hover {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      }
+      :global([data-theme='dark']) .header-actions button, :global([data-theme='dark']) .header-link-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      }
+      :global([data-theme='dark']) .header-actions button:hover, :global([data-theme='dark']) .header-link-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* ====== フッター ====== */
+      .footer {
+        position: relative;
+        z-index: 20;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 2rem;
+        opacity: 0.7;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+      .footer-content {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      /* ====== シェアメニュー周り ====== */
+      .share-wrapper {
+        position: relative;
+      }
+      .share-menu {
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        background: var(--glass-bg);
+        border-radius: 16px;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+        min-width: 180px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        backdrop-filter: blur(16px);
+      }
+      .share-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+      .share-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.8rem 1rem;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        color: var(--text-color);
+        font-family: inherit;
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .share-item:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+      [data-theme='dark'] .share-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      
+      .toast {
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--text-color);
+        color: var(--bg-gradient);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        white-space: nowrap;
+      }
+      [data-theme='dark'] .toast {
+        color: #000;
+        background: #fff;
+      }
+      .toast.show {
+        opacity: 1;
+      }
+
+      /* ====== アイコンの表示切り替え ====== */
+      .icon-sun, .icon-moon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* 
+         ライトテーマの時は「月に切り替える」のでMoonを表示。
+         ダークテーマの時は「太陽に切り替える」のでSunを表示。
+      */
+      :global([data-theme='dark']) .icon-moon { display: none !important; }
+      :global([data-theme='dark']) .icon-sun { display: flex !important; }
+      
+      :global([data-theme='light']) .icon-sun { display: none !important; }
+      :global([data-theme='light']) .icon-moon { display: flex !important; }
+
+      /* ====== 作者モーダル ====== */
+      .modal-content {
+        position: relative;
+        padding: 2rem;
+        color: var(--text-color);
+      }
+      .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        font-size: 2rem;
+        line-height: 1;
+        color: inherit;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+      .close-btn:hover {
+        opacity: 1;
+      }
+      
+      .author-info h2 {
+        margin-top: 0;
+        font-size: 1.5rem;
+      }
+      .author-profile {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 1rem 0;
+      }
+      .author-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--glass-border);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      }
+      .author-name {
+        font-size: 1.3rem;
+        font-weight: 800;
+      }
+      
+      .modal-divider {
+        border: none;
+        border-top: 1px dashed var(--glass-border);
+        margin: 2rem 0;
+        opacity: 0.5;
+      }
+
+      .support-section {
+        text-align: center;
+        font-size: 0.85rem;
+        line-height: 1.8;
+      }
+
+      .support-section p {
+        margin-bottom: 1rem;
+      }
+
+      .text-link {
+        color: var(--tag-web);
+        text-decoration: underline;
+        font-weight: 700;
+        transition: opacity 0.2s;
+      }
+      .text-link:hover {
+        opacity: 0.7;
+      }
+      [data-theme='dark'] .text-link {
+        color: var(--tag-spreadsheet);
+      }
+
+      .small-note {
+        font-size: 0.75rem;
+        opacity: 0.7;
+      }
+
+      .author-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 1rem;
+      }
+      .link-btn {
+        padding: 0.5rem 1rem;
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: background 0.2s, transform 0.2s;
+      }
+      [data-theme='dark'] .link-btn {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .link-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      [data-theme='dark'] .link-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+    </style>
+  </body>
+</html>

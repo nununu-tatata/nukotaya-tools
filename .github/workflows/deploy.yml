@@ -1,0 +1,43 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 'main'ブランチへのプッシュ時に実行されます
+  push:
+    branches: [ main, master ]
+  # 手動で実行することも可能にします
+  workflow_dispatch:
+
+# GITHUB_TOKENの権限を設定して、Pagesへのデプロイを許可します
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 複数回のデプロイが重なった場合にキャンセルします
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3
+        # with:
+          # path: . # リポジトリのルートディレクトリにAstroプロジェクトがある場合
+          # node-version: 20 # Nodeのバージョン指定
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

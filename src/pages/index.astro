@@ -1,0 +1,643 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const tools = [
+  {
+    id: '404-tool',
+    title: 'CoCチャパレ＆コマ作成ツール',
+    description: 'キャラクター保管所(CoC6版)のデータから、チャットパレットとコマ用プロフィールを一括作成。',
+    detailText: 'キャラクター保管所(CoC6版)のデータから、チャットパレットとコマ用プロフィールを一括作成。\nTekeyへの直接送信や、ココフォリア用データの出力、文字色プレビュー機能も搭載。',
+    url: 'https://nununu-tatata.github.io/404-tool/',
+    xUrl: 'https://x.com/nukonuko_4/status/2012091202644881772?s=20',
+    type: 'Web',
+    status: '公開中',
+    image: '/chatpare_ogp.png'
+  },
+  {
+    id: 'log-checker',
+    title: 'CoC成長チェックツール',
+    description: 'Tekeyやココフォリアのログから技能の成長を自動判定・集計するツールです。',
+    detailText: 'Tekeyやココフォリアのログをドラッグ＆ドロップするだけで、技能の成長（CL・FB・S・初期値など）を自動判定・集計するツールです。スマホ対応！\n６版のTekey（v2）とココフォリアのログに対応。様々なオプションで好きな成長をチェックしテキスト出力可能です。',
+    url: 'https://nununu-tatata.github.io/log-checker/',
+    xUrl: 'https://x.com/nukonuko_4/status/2017164633191174491?s=20',
+    type: 'Web',
+    status: '公開中',
+    image: 'https://nununu-tatata.github.io/log-checker/ogp.png'
+  },
+  {
+    id: 'keypale',
+    title: 'KeyPale',
+    description: 'Tekey向けチャパレ編集エディタ。素早く快適にチャパレを編集。',
+    detailText: 'KeyPaleはTekey向けのチャットパレット（シナリオテキスト）を快適に編集できるデスクトップアプリです。\nタブ管理・プレビュー・定型文（スニペット・変数）でシナリオ作成をサポートします。',
+    url: 'https://alpha.booth.pm/items/7976314',
+    xUrl: 'https://x.com/nukonuko_4/status/2022241838795526288?s=20',
+    type: 'BOOTH',
+    status: '公開中',
+    image: 'https://booth.pximg.net/b72d37c2-6b53-40ba-a5e2-bd7e0f1f61e9/i/7976314/f49d3507-1dbd-478f-a9bf-01959b27334c.png'
+  },
+  {
+    id: 'tecopi',
+    title: 'TECOPI',
+    description: 'テキスト送信支援ツール。シナリオテキストを手軽にコピペ＆送信。',
+    detailText: 'TRPGのオンラインセッションにおける「シナリオテキストの送信」に特化した、効率化デスクトップアプリです。\n長文のシナリオやPDFからコピーした文章をサクサク分割・整理し、ダブルクリックでココフォリアなどのセッションツールへ自動送信します。',
+    url: 'https://alpha.booth.pm/items/8544644',
+    xUrl: 'https://x.com/nukonuko_4/status/2070102447843160216?s=20',
+    type: 'BOOTH',
+    status: '公開中',
+    image: 'https://booth.pximg.net/b72d37c2-6b53-40ba-a5e2-bd7e0f1f61e9/i/8544644/2ac04987-e94e-4bef-a381-3432b257a917.png'
+  },
+  {
+    id: 'backup-kun',
+    title: '保管所CoC6版CS⇒スプシバックアップくん',
+    description: '保管所のデータをスプレッドシートに自動バックアップ。',
+    detailText: '現在作成中のスプレッドシートツールです。\nキャラクター保管所に登録しているCoC6版のキャラクターシートのデータを、安全にスプレッドシートにバックアップ・管理することができます。',
+    url: 'https://x.com/nukonuko_4/status/2057406689859838067',
+    xUrl: 'https://x.com/nukonuko_4/status/2057406689859838067?s=20',
+    type: 'Spreadsheet',
+    status: '作成中',
+    image: 'https://pbs.twimg.com/media/HI1f5foaYAA4sfk?format=png&name=medium'
+  }
+];
+
+// 無限カルーセル用に3セット分を出力する
+const infiniteTools = [...tools, ...tools, ...tools];
+---
+
+<Layout title="ぬこた屋ツールズ">
+  <!-- 全体を包むラッパー（ここでシフトアップを制御） -->
+  <div id="main-wrapper" class="idea1-wrapper">
+    
+    <!-- ツール一覧 横スクロールエリア -->
+    <div class="slider-wrapper">
+      <button class="slider-btn prev-btn glass" aria-label="前へ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      
+      <div class="horizontal-scroll" id="tool-slider">
+        {infiniteTools.map((tool, index) => (
+          <button class="h-card glass" data-target={`details-${tool.id}`} data-index={index}>
+            <div class="h-card-img" style={tool.image ? `background-image:url(${tool.image})` : 'background:rgba(0,0,0,0.05)'}></div>
+            <div class="h-card-body">
+              <div class="tag-group">
+                <span class={`tag tag-${tool.type.toLowerCase()}`}>{tool.type}</span>
+                <span class={`status-tag status-${tool.status === '公開中' ? 'active' : 'wip'}`}>{tool.status}</span>
+              </div>
+              <h3>{tool.title}</h3>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <button class="slider-btn next-btn glass" aria-label="次へ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <!-- 展開される詳細パネルエリア (1セット分のみ) -->
+    <div class="details-stage">
+      {tools.map((tool) => (
+        <div id={`details-${tool.id}`} class="stage-panel hidden">
+          <button class="close-stage" aria-label="閉じる">×</button>
+          <div class="stage-layout">
+            {tool.image && (
+              <div class="stage-left">
+                <img src={tool.image} alt={tool.title} class="stage-image" />
+              </div>
+            )}
+            <div class="stage-right">
+              <h2>{tool.title}</h2>
+              <div class="tag-group" style="justify-content: flex-start; gap: 10px; margin-bottom: 1rem;">
+                <span class={`tag tag-${tool.type.toLowerCase()}`}>{tool.type}</span>
+                <span class={`status-tag status-${tool.status === '公開中' ? 'active' : 'wip'}`}>{tool.status}</span>
+              </div>
+              <div class="stage-desc">
+                {tool.detailText.split('\n').map(line => <p>{line}</p>)}
+              </div>
+              <div class="stage-actions">
+                {tool.status === '公開中' && (
+                  <a href={tool.url} target="_blank" rel="noopener noreferrer" class="btn btn-primary">公開ページへ ↗</a>
+                )}
+                {tool.xUrl && (
+                  <a href={tool.xUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">💬 X(旧Twitter)で見る</a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- リクエストバナー -->
+    <div class="request-banner glass">
+      <div class="request-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+      </div>
+      <div class="request-text">
+        <h4>作ってほしいツールがあったらこちら！</h4>
+        <p>TRPGをもっと便利にするアイデア、大募集。お気軽にリクエストをお送りください。</p>
+      </div>
+      <a href="https://forms.gle/Vv5GeqkwYxQLUdhH6" target="_blank" class="btn btn-primary request-btn">リクエストを送る ↗</a>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // === スライダーと無限スクロール制御 ===
+  const slider = document.getElementById('tool-slider');
+  const wrapper = document.getElementById('main-wrapper');
+  const prevBtn = document.querySelector('.prev-btn');
+  const nextBtn = document.querySelector('.next-btn');
+
+  let isHovered = false;
+  let isClicked = false;
+  let animationId: number;
+  
+  // スムーズな無限スクロールを実現するための設定値
+  // (カード幅 280px + gap 24px) * 元の要素数(5) = 1520px
+  const setWidth = (280 + 24) * 5; 
+
+  function autoScroll() {
+    if (!isHovered && !isClicked && slider) {
+      slider.scrollLeft += 0.8; // 流れるスピード
+      // 1セット分スクロールしたら、違和感なく0に戻す（無限ループ）
+      if (slider.scrollLeft >= setWidth) {
+        slider.scrollLeft = 0;
+      }
+    }
+    animationId = requestAnimationFrame(autoScroll);
+  }
+
+  // 初期化（スクロール開始）
+  if (slider) {
+    animationId = requestAnimationFrame(autoScroll);
+  }
+
+  // ホバー（またはタッチ）で一時停止
+  slider?.addEventListener('mouseenter', () => { isHovered = true; });
+  slider?.addEventListener('mouseleave', () => { isHovered = false; });
+  slider?.addEventListener('touchstart', () => { isHovered = true; });
+  slider?.addEventListener('touchend', () => { isHovered = false; });
+
+  // 矢印ボタンでの手動スクロール（クリック時は自動スクロールを一時的に止める）
+  const manualScrollAmount = 300;
+  prevBtn?.addEventListener('click', () => {
+    slider?.scrollBy({ left: -manualScrollAmount, behavior: 'smooth' });
+    isHovered = true; setTimeout(() => { isHovered = false; }, 1000);
+  });
+  nextBtn?.addEventListener('click', () => {
+    slider?.scrollBy({ left: manualScrollAmount, behavior: 'smooth' });
+    isHovered = true; setTimeout(() => { isHovered = false; }, 1000);
+  });
+
+
+  // === カード展開（シフトアップと吹き出し）制御 ===
+  const cards = document.querySelectorAll('.h-card');
+  const panels = document.querySelectorAll('.stage-panel');
+  let activePanel: HTMLElement | null = null;
+  let activeTargetId: string | null = null;
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const targetId = card.getAttribute('data-target');
+      const panel = document.getElementById(targetId as string);
+      
+      // 同じパネルを再度クリックしたら閉じる
+      if (activeTargetId === targetId) {
+        closeAll();
+        return;
+      }
+
+      // 他のパネルや状態をリセット
+      cards.forEach(c => c.classList.remove('active'));
+      if (activePanel) activePanel.classList.remove('open');
+
+      if (panel) {
+        // 新しいパネルを開く
+        panel.classList.add('open');
+        // クリックしたターゲットと同じIDを持つすべてのクローンカードをアクティブにする
+        cards.forEach(c => {
+          if (c.getAttribute('data-target') === targetId) c.classList.add('active');
+        });
+        
+        activePanel = panel;
+        activeTargetId = targetId;
+
+        // 自動スクロールを完全停止し、ラッパーを上部へシフト
+        isClicked = true;
+        wrapper?.classList.add('is-expanded');
+        
+        // 吹き出しのしっぽ（中央）に合うように、クリックしたカードを画面中央にスナップさせる
+        setTimeout(() => {
+          card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 50);
+      }
+    });
+  });
+
+  const closeBtns = document.querySelectorAll('.close-stage');
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', closeAll);
+  });
+
+  function closeAll() {
+    if (activePanel) {
+      activePanel.classList.remove('open');
+      cards.forEach(c => c.classList.remove('active'));
+      activePanel = null;
+      activeTargetId = null;
+      
+      // シフトアップを解除して中央に戻す
+      wrapper?.classList.remove('is-expanded');
+      
+      // 自動スクロールを再開
+      setTimeout(() => {
+        isClicked = false;
+      }, 500); // シフトダウンのアニメーションが終わるまで少し待つ
+    }
+  }
+</script>
+
+<style>
+  /* 全体を包み、画面中央配置を制御するラッパー */
+  .idea1-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+    
+    /* 初期状態は画面中央（padding-topで調整） */
+    padding-top: 15vh;
+    min-height: calc(100vh - 120px); /* ヘッダー分を引いた高さ */
+    transition: padding-top 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* 展開時は上にシフト */
+  .idea1-wrapper.is-expanded {
+    padding-top: 2rem;
+  }
+
+  /* スライダー外枠 */
+  .slider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  /* 左右のスクロールボタン (PC向け) */
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .slider-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+    background: rgba(0,0,0,0.05);
+  }
+  [data-theme='dark'] .slider-btn:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  .slider-btn svg { width: 24px; height: 24px; }
+  .prev-btn { left: -10px; }
+  .next-btn { right: -10px; }
+
+  @media (max-width: 768px) {
+    .slider-btn { display: none; }
+  }
+
+  /* 横スクロールエリア（自動スクロールのためスナップを無効化） */
+  .horizontal-scroll {
+    display: flex;
+    align-items: center; /* カードの高さが変わっても中央揃えにする */
+    overflow-x: auto;
+    gap: 1.5rem; /* gapはJSの setWidth に影響するため変更時はJSも要修正 */
+    padding: 1rem 1rem 2rem 1rem;
+    width: 100%;
+    
+    /* IE, Edge, Firefox向けのスクロールバー非表示 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* WebKit系のスクロールバー非表示 */
+  .horizontal-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ====== カードデザインの動的変化 ====== */
+  .h-card {
+    flex: 0 0 280px; /* カード幅 */
+    height: 420px; /* 初期状態: 縦長の長方形（ポートレート） */
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 16px;
+    text-align: left;
+    outline: 2px solid transparent;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    color: inherit;
+    font-family: inherit;
+  }
+
+  /* 詳細展開時のカード: 少し横長の長方形に縮む */
+  .idea1-wrapper.is-expanded .h-card {
+    height: 180px; /* 高さが縮むことで 280x180 の横長になる */
+  }
+
+  .h-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  [data-theme='dark'] .h-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  
+  /* 他が展開されている時、非アクティブなカードは少し暗くする */
+  .idea1-wrapper.is-expanded .h-card:not(.active) {
+    filter: grayscale(0.5) opacity(0.6);
+    transform: scale(0.95);
+  }
+
+  .h-card.active {
+    outline: 3px solid var(--text-color);
+    transform: scale(1.05);
+    z-index: 5;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  }
+  [data-theme='dark'] .h-card.active {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  }
+
+  /* カード内画像 */
+  .h-card-img {
+    width: 100%;
+    height: 300px; /* 初期状態: 大きめの画像エリア */
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom: 1px solid var(--glass-border);
+    transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* 展開時のカード画像: 高さを縮めて横長カードにフィットさせる */
+  .idea1-wrapper.is-expanded .h-card-img {
+    height: 90px; 
+  }
+
+  /* カード内テキスト */
+  .h-card-body { 
+    padding: 1rem; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 1;
+  }
+  .tag-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .h-card-body h3 { 
+    margin: 0.5rem 0 0 0; 
+    font-size: 1.1rem; 
+    font-weight: 800; 
+    transition: font-size 0.3s;
+  }
+  .idea1-wrapper.is-expanded .h-card-body h3 {
+    font-size: 0.95rem; /* 小さくなったカードに合わせて少しフォントも縮小 */
+  }
+  
+  .tag {
+    align-self: flex-start;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: white;
+  }
+  .tag-booth { background: var(--tag-booth); }
+  .tag-web { background: var(--tag-web); }
+  .tag-spreadsheet { background: var(--tag-spreadsheet); }
+
+  .status-tag {
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    border: 1.5px solid currentColor;
+    background: transparent;
+  }
+  .status-active { color: var(--tag-web); }
+  [data-theme='dark'] .status-active { color: #8ec3ff; }
+  
+  .status-wip { color: var(--tag-spreadsheet); opacity: 0.8; }
+  [data-theme='dark'] .status-wip { color: #5bc579; opacity: 1; }
+
+  /* ====== 選択中のツール詳細表示（吹き出し型パネル） ====== */
+  .details-stage {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1000px;
+    margin-bottom: 2rem;
+  }
+
+  .stage-panel {
+    display: none;
+    opacity: 0;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    position: relative;
+    padding: 3rem;
+    margin-top: 30px; /* インジケーター用のスペース */
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  }
+  .stage-panel.open {
+    display: block;
+  }
+
+  [data-theme='dark'] .stage-panel {
+    background: rgba(30, 30, 30, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+
+  /* 独立した浮遊するひし形インジケーター */
+  @keyframes floatingDiamond {
+    0% { transform: translateX(-50%) translateY(0) rotate(45deg); }
+    100% { transform: translateX(-50%) translateY(-6px) rotate(45deg); }
+  }
+  .stage-panel::before {
+    content: '';
+    position: absolute;
+    top: -24px;
+    left: 50%; /* カードはスクロールで中央に来るため50%でOK */
+    width: 14px;
+    height: 14px;
+    background: var(--text-color);
+    border-radius: 3px;
+    animation: floatingDiamond 0.8s infinite alternate ease-in-out;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .close-stage {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .close-stage:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  .stage-layout {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+  .stage-left { flex: 0 0 350px; }
+  .stage-image {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+  }
+  .stage-right { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+  .stage-right h2 { margin: 0; font-size: 1.8rem; font-weight: 800; }
+  .stage-desc { margin-top: 1rem; line-height: 1.7; opacity: 0.9; }
+
+  .stage-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.9rem;
+    transition: transform 0.2s, filter 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn-primary { background: var(--text-color); color: var(--bg-gradient); } /* フォールバック */
+  :global([data-theme='light']) .btn-primary { background: var(--text-color); color: #ffffff; }
+  :global([data-theme='dark']) .btn-primary { background: var(--text-color); color: #000000; }
+  
+  .btn-secondary { background: rgba(0,0,0,0.05); color: var(--text-color); border: 1px solid var(--glass-border); }
+  :global([data-theme='dark']) .btn-secondary { background: rgba(255,255,255,0.05); }
+
+  /* ====== リクエストバナー (20%縮小版) ====== */
+  .request-banner {
+    max-width: 640px;
+    margin: 2rem auto 4rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .request-banner:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  }
+  :global([data-theme='dark']) .request-banner {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  
+  .request-icon {
+    flex: 0 0 48px;
+    height: 48px;
+    background: var(--text-color);
+    color: var(--glass-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  :global([data-theme='dark']) .request-icon {
+    color: #000;
+  }
+  .request-icon svg { width: 24px; height: 24px; }
+  
+  .request-text {
+    flex: 1;
+    text-align: left;
+  }
+  .request-text h4 {
+    margin: 0 0 0.4rem 0;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+  .request-text p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  .request-btn {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .stage-layout { flex-direction: column; }
+    .stage-left { flex: auto; width: 100%; }
+    .idea1-wrapper { padding-top: 5vh; }
+    
+    .h-card { height: 380px; flex: 0 0 240px; }
+    .h-card-img { height: 260px; }
+    .idea1-wrapper.is-expanded .h-card { height: 160px; }
+    .idea1-wrapper.is-expanded .h-card-img { height: 80px; }
+    
+    .request-banner {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+    .request-text { text-align: center; }
+  }
+</style>
+
+</script>

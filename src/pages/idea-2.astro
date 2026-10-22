@@ -1,0 +1,316 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const tools = [
+  {
+    id: 'log-checker',
+    title: 'CoC成長チェックツール',
+    description: 'Tekeyやココフォリアのログから技能の成長を自動判定・集計するツールです。',
+    detailText: 'Tekeyやココフォリアのログをドラッグ＆ドロップするだけで、技能の成長（CL・FB・S・初期値など）を自動判定・集計するツールです。スマホ対応！\n６版のTekey（v2）とココフォリアのログに対応。様々なオプションで好きな成長をチェックしテキスト出力可能です。',
+    url: 'https://nununu-tatata.github.io/log-checker/',
+    type: 'Web',
+    image: 'https://nununu-tatata.github.io/log-checker/ogp.png'
+  },
+  {
+    id: 'keypale',
+    title: 'KeyPale',
+    description: 'Tekey向けチャパレ編集エディタ。素早く快適にチャパレを編集。',
+    detailText: 'KeyPaleはTekeyでのオンラインセッションをより快適にするためのデスクトップアプリケーションです。\n直感的な操作とショートカットキーを駆使して、チャットパレットの作成や編集を爆速で行えます。',
+    url: 'https://alpha.booth.pm/items/7976314',
+    type: 'BOOTH'
+  },
+  {
+    id: 'backup-kun',
+    title: 'CoC6版CS バックアップくん',
+    description: '保管所のデータをスプレッドシートに自動バックアップ。',
+    detailText: '現在作成中のスプレッドシートツールです。\nキャラクター保管所に登録しているCoC6版のキャラクターシートのデータを、安全にスプレッドシートにバックアップ・管理することができます。',
+    url: 'https://x.com/nukonuko_4/status/2057406689859838067',
+    type: 'Spreadsheet'
+  },
+  {
+    id: '404-tool',
+    title: 'CoCチャパレ＆コマ作成',
+    description: 'ブラウザ上で素早くココフォリア用のコマやチャットパレットを生成。',
+    detailText: 'ブラウザ上で動作するWEBツールです。\n必要なステータスを入力するだけで、ココフォリアにそのまま流し込める形式のコマデータやチャットパレットを簡単に作成できます。',
+    url: 'https://nununu-tatata.github.io/404-tool/',
+    type: 'Web'
+  },
+  {
+    id: 'tecopi',
+    title: 'TECOPI',
+    description: 'テキスト送信支援ツール。よく使う定型文を手軽にコピペ＆送信。',
+    detailText: 'TECOPI（テキスト送信支援ツール）は、セッション中によく使う描写や定型文をあらかじめ登録しておき、必要な時にワンクリックで呼び出して送信できるBOOTH配布ツールです。\nKP（キーパー）の負担を大きく軽減します。',
+    url: 'https://alpha.booth.pm/items/8544644',
+    type: 'BOOTH'
+  }
+];
+---
+
+<Layout title="ぬこた屋ツールズ (アイデア2)">
+  <div class="page-title">
+    <h2>💡 アイデア2: ドック＆ステージ型</h2>
+    <p>下のドックから選ぶと、中央のステージに詳細が展開されます。</p>
+  </div>
+
+  <div class="idea2-container">
+    
+    <!-- メインステージ（詳細表示） -->
+    <div class="stage-area">
+      {tools.map((tool, index) => (
+        <div id={`stage-${tool.id}`} class={`stage-content glass ${index === 0 ? 'active' : ''}`}>
+          <div class="stage-layout">
+            <div class="stage-left">
+              {tool.image ? (
+                <img src={tool.image} alt={tool.title} class="stage-image" />
+              ) : (
+                <div class="stage-image placeholder"></div>
+              )}
+            </div>
+            <div class="stage-right">
+              <span class={`tag tag-${tool.type.toLowerCase()}`}>{tool.type}</span>
+              <h2>{tool.title}</h2>
+              <p class="stage-short">{tool.description}</p>
+              <div class="stage-desc">
+                {tool.detailText.split('\n').map(line => <p>{line}</p>)}
+              </div>
+              <div class="stage-actions">
+                <a href={tool.url} target="_blank" rel="noopener noreferrer" class="btn btn-primary">公開ページへ ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- ドック（選択メニュー） -->
+    <div class="dock-area">
+      <div class="dock glass">
+        {tools.map((tool, index) => (
+          <button class={`dock-item ${index === 0 ? 'active' : ''}`} data-target={`stage-${tool.id}`} aria-label={tool.title}>
+            <span class={`dock-dot dot-${tool.type.toLowerCase()}`}></span>
+            <span class="dock-tooltip">{tool.title}</span>
+          </button>
+        ))}
+      </div>
+      <p class="dock-hint">↑ アイコンを選んで切り替え</p>
+    </div>
+
+  </div>
+
+  <div class="nav-links">
+    <a href="/idea-1" class="glass">← アイデア1に戻る</a>
+    <a href="/idea-3" class="glass">アイデア3 (ジグザグ型) を見る →</a>
+  </div>
+</Layout>
+
+<script>
+  const dockItems = document.querySelectorAll('.dock-item');
+  const stageContents = document.querySelectorAll('.stage-content');
+
+  dockItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // 選択状態のリセット
+      dockItems.forEach(d => d.classList.remove('active'));
+      stageContents.forEach(s => s.classList.remove('active'));
+      
+      // 新しい対象をアクティブに
+      item.classList.add('active');
+      const targetId = item.getAttribute('data-target');
+      const targetContent = document.getElementById(targetId as string);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+</script>
+
+<style>
+  .page-title { text-align: center; margin-bottom: 2rem; }
+  .page-title h2 { margin-bottom: 0.5rem; }
+
+  .idea2-container {
+    max-width: 1000px;
+    margin: 0 auto 4rem;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  /* ステージエリア */
+  .stage-area {
+    position: relative;
+    min-height: 400px;
+  }
+  
+  .stage-content {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.98);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 2.5rem;
+    border-radius: 24px;
+  }
+  .stage-content.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    position: relative;
+  }
+
+  .stage-layout {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .stage-left { flex: 0 0 45%; }
+  .stage-image {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  .placeholder {
+    aspect-ratio: 16/9;
+    background: rgba(0,0,0,0.05);
+  }
+  [data-theme='dark'] .placeholder { background: rgba(255,255,255,0.05); }
+
+  .stage-right { flex: 1; }
+  .stage-right h2 { margin: 0.5rem 0; font-size: 2rem; font-weight: 900; }
+  .stage-short { font-weight: bold; font-size: 1.1rem; opacity: 0.8; margin-bottom: 1.5rem; }
+  .stage-desc p { line-height: 1.6; opacity: 0.9; margin-bottom: 1rem; }
+
+  .tag {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: white;
+  }
+  .tag-booth { background: var(--tag-booth); }
+  .tag-web { background: var(--tag-web); }
+  .tag-spreadsheet { background: var(--tag-spreadsheet); }
+
+  .stage-actions { margin-top: 2rem; }
+  .btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    transition: transform 0.2s, filter 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn-primary { background: var(--text-color); color: var(--bg-gradient); }
+  [data-theme='dark'] .btn-primary { background: #fff; color: #000; }
+
+  /* ドックエリア */
+  .dock-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .dock {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 2rem;
+    border-radius: 40px;
+    align-items: center;
+  }
+  .dock-hint {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .dock-item {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  [data-theme='dark'] .dock-item { background: rgba(255,255,255,0.05); }
+
+  .dock-item:hover {
+    transform: translateY(-10px) scale(1.2);
+    background: var(--text-color);
+  }
+  .dock-item.active {
+    background: var(--text-color);
+    transform: scale(1.1);
+  }
+
+  .dock-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .dock-item:hover .dock-dot, .dock-item.active .dock-dot {
+    display: none;
+  }
+
+  .dot-booth { background: var(--tag-booth); }
+  .dot-web { background: var(--tag-web); }
+  .dot-spreadsheet { background: var(--tag-spreadsheet); }
+
+  .dock-tooltip {
+    position: absolute;
+    bottom: -35px;
+    background: var(--text-color);
+    color: var(--bg-gradient);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateY(-10px);
+  }
+  [data-theme='dark'] .dock-tooltip { background: #fff; color: #000; }
+  
+  .dock-item:hover .dock-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .stage-layout { flex-direction: column; }
+    .stage-left { flex: auto; width: 100%; }
+    .stage-content { padding: 1.5rem; }
+    .dock { gap: 0.8rem; padding: 0.8rem 1.2rem; }
+    .dock-item { width: 40px; height: 40px; }
+  }
+
+  .nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 10;
+  }
+  .nav-links a {
+    padding: 1rem 2rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 800;
+  }
+</style>

@@ -1,0 +1,187 @@
+:root {
+  /* Light Theme Variables */
+  --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  --text-color: #333333;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --tag-booth: #ff4f8b;
+  --tag-web: #0088cc;
+  --tag-spreadsheet: #0f9d58;
+  --orb-1-color: rgba(64, 224, 208, 0.4);
+  --orb-2-color: rgba(255, 140, 0, 0.3);
+  --orb-3-color: rgba(218, 112, 214, 0.4);
+}
+
+[data-theme='dark'] {
+  /* Dark Theme Variables */
+  --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  --text-color: #f0f0f0;
+  --glass-bg: rgba(16, 18, 27, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --tag-booth: #ff75a6;
+  --tag-web: #5ce1e6;
+  --tag-spreadsheet: #2bd47e;
+  --orb-1-color: rgba(20, 184, 166, 0.25);
+  --orb-2-color: rgba(236, 72, 153, 0.2);
+  --orb-3-color: rgba(139, 92, 246, 0.25);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Zen Maru Gothic', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-color);
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* Accordion List Layout */
+.accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* Modal (Dialog) Styling */
+dialog {
+  padding: 0;
+  border: none;
+  background: transparent;
+  max-width: 90vw;
+  width: 600px;
+  border-radius: 24px;
+  outline: none;
+}
+
+dialog::backdrop {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.2s ease forwards;
+}
+[data-theme='dark'] dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+dialog .glass {
+  background: rgba(255, 255, 255, 0.95);
+}
+[data-theme='dark'] dialog .glass {
+  background: rgba(25, 27, 36, 0.95);
+}
+
+dialog[open] {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Background Animated Dice SVG */
+.bg-dice {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  width: 250px;
+  height: 250px;
+  opacity: 0.15;
+  z-index: 1;
+  pointer-events: none;
+  animation: floatDice 10s ease-in-out infinite;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+@keyframes floatDice {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(15deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Fluid Animated Orbs Background */
+.bg-orbs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.8;
+  animation: floatOrb 20s infinite ease-in-out alternate;
+  will-change: transform;
+}
+
+.orb-1 {
+  width: 45vw;
+  height: 45vw;
+  top: -10%;
+  left: -10%;
+  background: var(--orb-1-color);
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 55vw;
+  height: 55vw;
+  bottom: -20%;
+  right: -10%;
+  background: var(--orb-2-color);
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 40vw;
+  height: 40vw;
+  top: 40%;
+  left: 30%;
+  background: var(--orb-3-color);
+  animation-delay: -10s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(8vw, 12vh) scale(1.1); }
+  100% { transform: translate(-8vw, 5vh) scale(0.95); }
+}
