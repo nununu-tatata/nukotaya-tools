@@ -27,9 +27,9 @@ jobs:
       
       - name: Install, build, and upload your site
         uses: withastro/action@v3
-        # with:
+        with:
           # path: . # リポジトリのルートディレクトリにAstroプロジェクトがある場合
-          # node-version: 20 # Nodeのバージョン指定
+          node-version: 24 # Astro 7 は Node 22.23 以上が必要（PCと同じ24に合わせる）
 
   deploy:
     needs: build
