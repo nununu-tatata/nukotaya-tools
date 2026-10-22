@@ -330,7 +330,7 @@ const lastUpdated = new Date().toLocaleDateString('ja-JP', {
         align-items: center;
       }
 
-      .header-actions button, .header-link-btn {
+      .header-actions button:not(.share-item), .header-link-btn {
         background: rgba(255, 255, 255, 0.7);
         border: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -345,22 +345,22 @@ const lastUpdated = new Date().toLocaleDateString('ja-JP', {
         transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
         text-decoration: none;
       }
-      .header-actions button svg, .header-link-btn svg {
+      .header-actions button:not(.share-item) svg, .header-link-btn svg {
         width: 22px;
         height: 22px;
       }
 
-      .header-actions button:hover, .header-link-btn:hover {
+      .header-actions button:not(.share-item):hover, .header-link-btn:hover {
         transform: scale(1.1);
         background: rgba(255, 255, 255, 0.9);
         box-shadow: 0 6px 14px rgba(0,0,0,0.1);
       }
-      :global([data-theme='dark']) .header-actions button, :global([data-theme='dark']) .header-link-btn {
+      :global([data-theme='dark']) .header-actions button:not(.share-item), :global([data-theme='dark']) .header-link-btn {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.15);
         box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       }
-      :global([data-theme='dark']) .header-actions button:hover, :global([data-theme='dark']) .header-link-btn:hover {
+      :global([data-theme='dark']) .header-actions button:not(.share-item):hover, :global([data-theme='dark']) .header-link-btn:hover {
         background: rgba(255, 255, 255, 0.2);
       }
 
