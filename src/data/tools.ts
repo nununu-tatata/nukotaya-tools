@@ -68,7 +68,7 @@ export const tools: Tool[] = [
     xUrl: 'https://x.com/nukonuko_4/status/2070102447843160216?s=20',
     type: 'BOOTH',
     status: '公開中',
-    image: 'https://booth.pximg.net/b72d37c2-6b53-40ba-a5e2-bd7e0f1f61e9/i/8544644/2ac04987-e94e-4bef-a381-3432b257a917.png'
+    image: `${import.meta.env.BASE_URL}tecopi_ogp.png`
   },
   {
     id: 'charasheet-backup',

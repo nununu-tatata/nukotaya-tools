@@ -6,6 +6,15 @@ interface Props {
 }
 
 const { title } = Astro.props;
+
+// 最終更新日はビルドした日（＝Pushして公開された日）を自動で入れる。
+// GitHub Actions は世界標準時で動くので、日本時間の日付にそろえる
+const lastUpdated = new Date().toLocaleDateString('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 ---
 
 <!doctype html>
@@ -139,7 +148,7 @@ const { title } = Astro.props;
     <footer class="footer">
       <div class="footer-content">
         <span>&copy; 2026 ぬこた</span>
-        <span>最終更新日：2026年6月26日</span>
+        <span>最終更新日：{lastUpdated}</span>
       </div>
     </footer>
 
