@@ -55,7 +55,10 @@ const tools = [
     xUrl: 'https://x.com/nukonuko_4/status/2113216292261945392?s=20',
     type: 'Spreadsheet',
     status: '公開中',
-    image: 'https://nununu-tatata.github.io/charasheet-backup/ogp.png'
+    image: 'https://nununu-tatata.github.io/charasheet-backup/ogp.png',
+    // 詳細パネルで切り替え・拡大表示できる画像（public/charasheet-backup/ に置く）。
+    // gallery があるときは詳細パネルでは image の代わりにこちらを使う（image はカルーセルのカード用）
+    gallery: [1, 2, 3, 4].map(n => `${import.meta.env.BASE_URL}charasheet-backup/${n}.png`)
   }
 ];
 
@@ -100,8 +103,20 @@ const infiniteTools = [...tools, ...tools, ...tools];
           <button class="close-stage" aria-label="閉じる">×</button>
           <div class="stage-layout">
             {tool.image && (
-              <div class="stage-left">
-                <img src={tool.image} alt={tool.title} class="stage-image" />
+              <div class="stage-left" data-images={JSON.stringify(tool.gallery ?? [tool.image])}>
+                <button class="stage-image-btn" aria-label="画像を拡大表示">
+                  <img src={tool.gallery?.[0] ?? tool.image} alt={tool.title} class={`stage-image${tool.gallery ? ' has-gallery' : ''}`} />
+                  <span class="zoom-hint">🔍 拡大</span>
+                </button>
+                {tool.gallery && (
+                  <div class="stage-thumbs">
+                    {tool.gallery.map((src, i) => (
+                      <button class={`stage-thumb${i === 0 ? ' active' : ''}`} aria-label={`画像${i + 1}を表示`}>
+                        <img src={src} alt="" loading="lazy" />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
             <div class="stage-right">
@@ -143,6 +158,19 @@ const infiniteTools = [...tools, ...tools, ...tools];
       <a href="https://forms.gle/Vv5GeqkwYxQLUdhH6" target="_blank" class="btn btn-primary request-btn">リクエストを送る ↗</a>
     </div>
   </div>
+
+  <!-- 画像の拡大表示（ライトボックス） -->
+  <dialog id="lightbox">
+    <div class="lb-track"></div>
+    <button class="lb-close" aria-label="閉じる">×</button>
+    <button class="lb-nav lb-prev" aria-label="前の画像">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button class="lb-nav lb-next" aria-label="次の画像">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <div class="lb-counter"></div>
+  </dialog>
 </Layout>
 
 <script>
@@ -236,6 +264,82 @@ const infiniteTools = [...tools, ...tools, ...tools];
         }, 50);
       }
     });
+  });
+
+  // === 詳細パネル内のギャラリー（サムネイルで大きい画像を切り替え） ===
+  function selectImage(left: Element, index: number) {
+    const images: string[] = JSON.parse(left.getAttribute('data-images') || '[]');
+    const mainImage = left.querySelector('.stage-image') as HTMLImageElement | null;
+    if (mainImage && images[index]) mainImage.src = images[index];
+    left.querySelectorAll('.stage-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+  }
+
+  document.querySelectorAll('.stage-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const left = thumb.closest('.stage-left');
+      const index = Array.from(left?.querySelectorAll('.stage-thumb') ?? []).indexOf(thumb);
+      if (left) selectImage(left, index);
+    });
+  });
+
+  // === 画像の拡大表示（ライトボックス）。左右ボタン・矢印キー・スワイプでスライド ===
+  const lightbox = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const lbTrack = lightbox?.querySelector('.lb-track') as HTMLElement | null;
+  const lbCounter = lightbox?.querySelector('.lb-counter') as HTMLElement | null;
+  let lbSource: Element | null = null; // 拡大表示を開いた詳細パネルの .stage-left
+  let lbCount = 0;
+
+  function lbCurrentIndex() {
+    if (!lbTrack || !lbTrack.clientWidth) return 0;
+    return Math.round(lbTrack.scrollLeft / lbTrack.clientWidth);
+  }
+
+  function lbUpdateCounter() {
+    if (lbCounter) lbCounter.textContent = `${lbCurrentIndex() + 1} / ${lbCount}`;
+  }
+
+  function lbGo(step: number) {
+    lbTrack?.scrollBy({ left: step * lbTrack.clientWidth, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.stage-image-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const left = btn.closest('.stage-left');
+      if (!left || !lightbox || !lbTrack) return;
+      const images: string[] = JSON.parse(left.getAttribute('data-images') || '[]');
+      const thumbs = Array.from(left.querySelectorAll('.stage-thumb'));
+      const start = Math.max(0, thumbs.findIndex(t => t.classList.contains('active')));
+
+      lbTrack.innerHTML = images.map(src => `<div class="lb-slide"><img src="${src}" alt="" /></div>`).join('');
+      lbSource = left;
+      lbCount = images.length;
+      lightbox.classList.toggle('single', lbCount <= 1);
+      lightbox.showModal();
+      lbTrack.scrollLeft = start * lbTrack.clientWidth;
+      lbUpdateCounter();
+    });
+  });
+
+  lbTrack?.addEventListener('scroll', lbUpdateCounter);
+  lightbox?.querySelector('.lb-prev')?.addEventListener('click', () => lbGo(-1));
+  lightbox?.querySelector('.lb-next')?.addEventListener('click', () => lbGo(1));
+  lightbox?.querySelector('.lb-close')?.addEventListener('click', () => lightbox.close());
+
+  lightbox?.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); lbGo(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); lbGo(1); }
+  });
+
+  // 画像の外側（黒い部分）をクリックしたら閉じる
+  lightbox?.addEventListener('click', e => {
+    const target = e.target as HTMLElement;
+    if (target === lightbox || target.classList.contains('lb-slide')) lightbox.close();
+  });
+
+  // 閉じたら、最後に見ていた画像を詳細パネル側にも反映する
+  lightbox?.addEventListener('close', () => {
+    if (lbSource) selectImage(lbSource, lbCurrentIndex());
+    lbSource = null;
   });
 
   const closeBtns = document.querySelectorAll('.close-stage');
@@ -535,6 +639,133 @@ const infiniteTools = [...tools, ...tools, ...tools];
     border-radius: 12px;
     border: 1px solid var(--glass-border);
   }
+  /* 画像ごとに縦横比が違っても、切り替え時に高さが変わらないように固定 */
+  .stage-image.has-gallery {
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+  }
+  .stage-thumbs {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .stage-thumb {
+    flex: 1;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    overflow: hidden;
+    background: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s, border-color 0.2s;
+  }
+  .stage-thumb:hover { opacity: 0.85; }
+  .stage-thumb.active { opacity: 1; border-color: var(--text-color); }
+  .stage-thumb img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .stage-image-btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+  }
+  .stage-image-btn .stage-image { display: block; }
+  .zoom-hint {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .stage-image-btn:hover .zoom-hint { opacity: 1; }
+
+  /* ====== 画像の拡大表示（ライトボックス） ====== */
+  #lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.88);
+    color: #fff;
+    overflow: hidden;
+  }
+  #lightbox[open] { animation: fadeIn 0.2s ease forwards; }
+  #lightbox::backdrop { background: transparent; backdrop-filter: none; }
+
+  .lb-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .lb-track::-webkit-scrollbar { display: none; }
+  /* 中身はスクリプトで作るので :global で指定 */
+  .lb-track :global(.lb-slide) {
+    flex: 0 0 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3.5rem 5rem;
+    box-sizing: border-box;
+    scroll-snap-align: center;
+  }
+  .lb-track :global(.lb-slide img) {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .lb-close, .lb-nav {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .lb-close:hover, .lb-nav:hover { background: rgba(255, 255, 255, 0.25); }
+  .lb-close { top: 12px; right: 12px; width: 44px; height: 44px; font-size: 1.6rem; line-height: 1; }
+  .lb-nav { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; }
+  .lb-nav svg { width: 26px; height: 26px; }
+  .lb-prev { left: 16px; }
+  .lb-next { right: 16px; }
+  .lb-counter {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+  /* 画像が1枚だけのときはスライド用の部品を隠す */
+  #lightbox.single .lb-nav,
+  #lightbox.single .lb-counter { display: none; }
+
   .stage-right { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
   .stage-right h2 { margin: 0; font-size: 1.8rem; font-weight: 800; }
   .stage-desc { margin-top: 1rem; line-height: 1.7; opacity: 0.9; }
@@ -623,6 +854,9 @@ const infiniteTools = [...tools, ...tools, ...tools];
   @media (max-width: 768px) {
     .stage-layout { flex-direction: column; }
     .stage-left { flex: auto; width: 100%; }
+    /* スマホはスワイプで送れるので、画像を大きく見せるため余白とボタンを小さく */
+    .lb-track :global(.lb-slide) { padding: 3.5rem 0.75rem; }
+    .lb-nav { top: auto; bottom: 8px; transform: none; width: 44px; height: 44px; }
     .idea1-wrapper { padding-top: 5vh; }
     
     .h-card { height: 380px; flex: 0 0 240px; }
