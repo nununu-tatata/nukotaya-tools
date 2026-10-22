@@ -363,7 +363,7 @@ const infiniteTools = [...tools, ...tools, ...tools];
     transform: translateY(-50%) scale(1.1);
     background: rgba(0,0,0,0.05);
   }
-  [data-theme='dark'] .slider-btn:hover {
+  :global([data-theme='dark']) .slider-btn:hover {
     background: rgba(255,255,255,0.1);
   }
   .slider-btn svg { width: 24px; height: 24px; }
@@ -419,7 +419,7 @@ const infiniteTools = [...tools, ...tools, ...tools];
     transform: translateY(-4px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
-  [data-theme='dark'] .h-card:hover {
+  :global([data-theme='dark']) .h-card:hover {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
   
@@ -435,7 +435,7 @@ const infiniteTools = [...tools, ...tools, ...tools];
     z-index: 5;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
   }
-  [data-theme='dark'] .h-card.active {
+  :global([data-theme='dark']) .h-card.active {
     box-shadow: 0 15px 40px rgba(0,0,0,0.6);
   }
 
@@ -502,10 +502,10 @@ const infiniteTools = [...tools, ...tools, ...tools];
     background: transparent;
   }
   .status-active { color: var(--tag-web); }
-  [data-theme='dark'] .status-active { color: #8ec3ff; }
+  :global([data-theme='dark']) .status-active { color: #8ec3ff; }
   
   .status-wip { color: var(--tag-spreadsheet); opacity: 0.8; }
-  [data-theme='dark'] .status-wip { color: #5bc579; opacity: 1; }
+  :global([data-theme='dark']) .status-wip { color: #5bc579; opacity: 1; }
 
   /* ====== 選択中のツール詳細表示（吹き出し型パネル） ====== */
   .details-stage {
@@ -532,7 +532,7 @@ const infiniteTools = [...tools, ...tools, ...tools];
     display: block;
   }
 
-  [data-theme='dark'] .stage-panel {
+  :global([data-theme='dark']) .stage-panel {
     background: rgba(30, 30, 30, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
