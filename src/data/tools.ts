@@ -35,7 +35,7 @@ export const tools: Tool[] = [
     xUrl: 'https://x.com/nukonuko_4/status/2012091202644881772?s=20',
     type: 'Web',
     status: '公開中',
-    image: `${import.meta.env.BASE_URL}chatpare_ogp.png`
+    image: `${import.meta.env.BASE_URL}products/404-tool.png`
   },
   {
     id: 'log-checker',
@@ -46,7 +46,7 @@ export const tools: Tool[] = [
     xUrl: 'https://x.com/nukonuko_4/status/2017164633191174491?s=20',
     type: 'Web',
     status: '公開中',
-    image: 'https://nununu-tatata.github.io/log-checker/ogp.png'
+    image: `${import.meta.env.BASE_URL}products/log-checker.png`
   },
   {
     id: 'keypale',
@@ -79,7 +79,17 @@ export const tools: Tool[] = [
     xUrl: 'https://x.com/nukonuko_4/status/2113216292261945392?s=20',
     type: 'Spreadsheet',
     status: '公開中',
-    image: 'https://nununu-tatata.github.io/charasheet-backup/ogp.png',
+    image: `${import.meta.env.BASE_URL}products/charasheet-backup.png`,
     gallery: [1, 2, 3, 4].map(n => `${import.meta.env.BASE_URL}charasheet-backup/${n}.png`)
+  },
+  {
+    id: 'charash-converter',
+    title: '保管所→キャラッシュ変換ツール',
+    description: 'キャラクター保管所(CoC6版)のキャラシを、キャラッシュに取り込めるテキストファイルに変換。',
+    detailText: 'キャラクター保管所(CoC6版)のキャラシURLを貼るだけで、キャラッシュの「インポート」で読み込めるテキストファイルを作るツールです。\nマイリストからURLを一括取得して、何百件でもまとめて変換。キャラッシュの取り込み上限に合わせて50人ずつZIPにまとめます。ふりがな・タグ・探索者の特徴も画面で確認・修正できます。',
+    url: 'https://nununu-tatata.github.io/charash-converter/',
+    type: 'Web',
+    status: '公開中',
+    image: `${import.meta.env.BASE_URL}products/charash-converter.png`
   }
 ];
