@@ -1,0 +1,89 @@
+<!doctype html>
+<!--
+  ぬこた屋ツールズの OGP 画像（public/ogp.png、1200×630）の元データ。
+  作り直し方は同じフォルダの README.md を参照。
+  カードの大きさ・位置・傾きは :root の --cw / --gap / --gx / --gy / --rot で調整できる。
+-->
+<html lang="ja"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; }
+  .canvas {
+    position: relative; width: 1200px; height: 630px; overflow: hidden;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    font-family: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; color: #333;
+  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(70px); }
+  .o1 { width: 620px; height: 620px; left: -200px; top: -260px; background: rgba(64,224,208,0.55); }
+  .o2 { width: 700px; height: 700px; right: -220px; bottom: -380px; background: rgba(255,140,0,0.38); }
+  .o3 { width: 520px; height: 520px; left: 420px; top: 260px; background: rgba(218,112,214,0.42); }
+  .o4 { width: 360px; height: 360px; right: 60px; top: -160px; background: rgba(64,224,208,0.30); }
+
+  .dice { position: absolute; width: 300px; height: 300px; left: 470px; bottom: -110px; color: #333; opacity: 0.10; transform: rotate(-12deg); }
+
+  .left { position: absolute; left: 60px; top: 0; height: 630px; width: 560px; display: flex; flex-direction: column; justify-content: center; }
+  .pill {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 20px; border-radius: 999px; font-size: 20px; font-weight: 700; letter-spacing: 0.08em;
+    background: rgba(255,255,255,0.6); border: 1.5px solid rgba(255,255,255,0.9);
+    box-shadow: 0 8px 24px rgba(31,38,135,0.07);
+  }
+  .pill .dot { width: 10px; height: 10px; border-radius: 50%; background: #40e0d0; box-shadow: 0 0 0 4px rgba(64,224,208,0.25); }
+  h1 { margin-top: 24px; font-size: 80px; font-weight: 900; line-height: 1.05; letter-spacing: -2px; white-space: nowrap; }
+  h1 .small { display: block; font-size: 40px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 8px; opacity: 0.55; }
+  .lead { margin-top: 26px; font-size: 30px; font-weight: 700; line-height: 1.5; }
+  .tags { margin-top: 30px; display: flex; gap: 12px; }
+  .tag { padding: 7px 18px; border-radius: 999px; color: #fff; font-family: 'Noto Sans JP', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 0.06em; }
+  .web { background: #0088cc; } .booth { background: #ff4f8b; } .sheet { background: #0f9d58; }
+  .url { position: absolute; left: 60px; bottom: 40px; font-size: 19px; font-weight: 700; opacity: 0.5; letter-spacing: 0.02em; }
+
+  .grid {
+    position: absolute;
+    left: calc(var(--gx) - var(--cw) - var(--gap) / 2);
+    top: calc(var(--gy) - var(--cw) - var(--gap) / 2);
+    display: grid; grid-template-columns: repeat(2, var(--cw)); gap: var(--gap);
+    transform-origin: calc(var(--cw) + var(--gap) / 2) calc(var(--cw) + var(--gap) / 2);
+    transform: rotate(var(--rot));
+  }
+  :root { --cw: 216px; --gap: 20px; --gx: 988px; --gy: 332px; --rot: -8deg; }
+  .card {
+    width: var(--cw); padding: 10px; border-radius: 28px;
+    background: rgba(255,255,255,0.55); border: 1.5px solid rgba(255,255,255,0.95);
+    box-shadow: 0 18px 40px rgba(31,38,135,0.13), 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .card img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 20px; }
+</style></head>
+<body><div class="canvas">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
+  <svg class="dice" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <polygon points="100,10 180,55 180,145 100,190 20,145 20,55" /><polygon points="100,135 45,70 155,70" />
+    <line x1="100" y1="10" x2="45" y2="70" /><line x1="100" y1="10" x2="155" y2="70" /><line x1="180" y1="55" x2="155" y2="70" />
+    <line x1="180" y1="145" x2="155" y2="70" /><line x1="180" y1="145" x2="100" y2="135" /><line x1="100" y1="190" x2="100" y2="135" />
+    <line x1="20" y1="145" x2="100" y2="135" /><line x1="20" y1="145" x2="45" y2="70" /><line x1="20" y1="55" x2="45" y2="70" />
+    <g fill="currentColor" stroke="none" text-anchor="middle" dominant-baseline="central" font-family="'Zen Maru Gothic', sans-serif">
+      <text x="100" y="98" font-size="32" font-weight="900">20</text><text x="100" y="55" font-size="20" font-weight="700">2</text>
+      <text x="55" y="50" font-size="16" font-weight="700">14</text><text x="145" y="50" font-size="16" font-weight="700">8</text>
+      <text x="34" y="95" font-size="14" font-weight="700">12</text><text x="166" y="95" font-size="14" font-weight="700">4</text>
+      <text x="55" y="120" font-size="16" font-weight="700">10</text><text x="145" y="120" font-size="16" font-weight="700">18</text>
+      <text x="73" y="160" font-size="14" font-weight="700">16</text><text x="126" y="160" font-size="14" font-weight="700">6</text>
+    </g>
+  </svg>
+
+  <div class="left">
+    <div class="pill"><span class="dot"></span>TRPG TOOLS</div>
+    <h1>ぬこた屋ツールズ</h1>
+    <p class="lead">TRPGのセッションを、もっと便利に。<br>自作ツールまとめサイト</p>
+    <div class="tags"><span class="tag web">WEB</span><span class="tag booth">BOOTH</span><span class="tag sheet">SPREADSHEET</span></div>
+  </div>
+  <div class="url">nununu-tatata.github.io/nukotaya-tools</div>
+
+  <div class="grid">
+    <div class="card"><img src="../../public/products/404-tool.png"></div>
+    <div class="card"><img src="../../public/products/log-checker.png"></div>
+    <div class="card"><img src="keypale.png"></div>
+    <div class="card"><img src="../../public/tecopi_ogp.png"></div>
+    <div class="card"><img src="../../public/products/charasheet-backup.png"></div>
+    <div class="card"><img src="../../public/products/charash-converter.png"></div>
+  </div>
+</div></body></html>
