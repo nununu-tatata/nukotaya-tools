@@ -29,8 +29,8 @@ export const tools: Tool[] = [
   {
     id: '404-tool',
     title: 'CoCチャパレ＆コマ作成ツール',
-    description: 'キャラクター保管所(CoC6版)のデータから、チャットパレットとコマ用プロフィールを一括作成。',
-    detailText: 'キャラクター保管所(CoC6版)のデータから、チャットパレットとコマ用プロフィールを一括作成。\nTekeyへの直接送信や、ココフォリア用データの出力、文字色プレビュー機能も搭載。',
+    description: 'キャラクター保管所・Charaeno・キャラッシュ(CoC6版)のデータから、チャットパレットとコマ用プロフィールを一括作成。',
+    detailText: 'キャラクター保管所・Charaeno・キャラッシュ(CoC6版)のデータから、チャットパレットとコマ用プロフィールを一括作成。\nTekeyへの直接送信や、ココフォリア用データの出力、文字色プレビュー機能も搭載。',
     url: 'https://nununu-tatata.github.io/404-tool/',
     xUrl: 'https://x.com/nukonuko_4/status/2012091202644881772?s=20',
     type: 'Web',

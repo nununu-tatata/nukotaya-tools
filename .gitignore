@@ -23,3 +23,6 @@ Thumbs.db
 
 # エディタの設定
 .idea/
+
+# 商品画像テンプレート（手元で商品画像を作り直す用。GitHubには上げない）
+design/products/
