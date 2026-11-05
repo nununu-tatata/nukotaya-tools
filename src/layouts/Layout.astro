@@ -163,6 +163,10 @@ const lastUpdated = new Date().toLocaleDateString('ja-JP', {
         <span>&copy; 2026 ぬこた</span>
         <span>最終更新日：{lastUpdated}</span>
       </div>
+      <p class="footer-note">
+        このサイトでは、利用状況を把握するためにGoogleアナリティクスを使用しています。個人を特定する情報は収集しません。
+        （<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener noreferrer">Googleによるデータの使用について</a>）
+      </p>
     </footer>
 
     <!-- 作者紹介モーダル -->
@@ -394,6 +398,16 @@ const lastUpdated = new Date().toLocaleDateString('ja-JP', {
         justify-content: center;
         gap: 1.5rem;
         flex-wrap: wrap;
+      }
+      .footer-note {
+        margin: 0.6rem auto 0;
+        max-width: 640px;
+        font-size: 0.7rem;
+        font-weight: 400;
+        line-height: 1.6;
+      }
+      .footer-note a {
+        color: inherit;
       }
 
       /* ====== シェアメニュー周り ====== */
