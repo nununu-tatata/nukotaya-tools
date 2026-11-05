@@ -25,6 +25,19 @@ const lastUpdated = new Date().toLocaleDateString('ja-JP', {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
     <title>{title}</title>
+    <!-- Googleアナリティクス（ぬこた屋ツールズ専用の測定ID）。
+         開発サーバーでの自分の確認アクセスを数えないよう、公開用のビルドのときだけ入れる -->
+    {import.meta.env.PROD && (
+      <>
+        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-NFT6ZGPJRG"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', 'G-NFT6ZGPJRG');
+        </script>
+      </>
+    )}
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
