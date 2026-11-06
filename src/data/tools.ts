@@ -88,6 +88,7 @@ export const tools: Tool[] = [
     description: 'キャラクター保管所(CoC6版)のキャラシを、キャラッシュに取り込めるテキストファイルに変換。',
     detailText: 'キャラクター保管所(CoC6版)のキャラシURLを貼るだけで、キャラッシュの「インポート」で読み込めるテキストファイルを作るツールです。\nマイリストからURLを一括取得して、何百件でもまとめて変換。キャラッシュの取り込み上限に合わせて50人ずつZIPにまとめます。ふりがな・タグ・探索者の特徴も画面で確認・修正できます。',
     url: 'https://nununu-tatata.github.io/charash-converter/',
+    xUrl: 'https://x.com/nukonuko_4/status/2118546418226840025?s=20',
     type: 'Web',
     status: '公開中',
     image: `${import.meta.env.BASE_URL}products/charash-converter.png`
