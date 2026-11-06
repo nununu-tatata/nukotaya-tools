@@ -91,6 +91,7 @@ export const tools: Tool[] = [
     xUrl: 'https://x.com/nukonuko_4/status/2118546418226840025?s=20',
     type: 'Web',
     status: '公開中',
-    image: `${import.meta.env.BASE_URL}products/charash-converter.png`
+    image: `${import.meta.env.BASE_URL}products/charash-converter.png`,
+    gallery: [1, 2, 3, 4].map(n => `${import.meta.env.BASE_URL}charash-converter/${n}.png`)
   }
 ];
